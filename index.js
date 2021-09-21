@@ -55,20 +55,14 @@ async function fetchAsset() {
     return runId
   })()
 
-  const artifactUrl = await (async function _f() {
+  const artifactUrl = await (async function () {
     const res = await fetch(
       endpoint + `/repos/${owner}/${repo}/actions/runs/${runId}/artifacts`,
     )
     const data = await res.json()
 
-    console.log(data)
-
     const { artifacts, total_count } = data
-    if (total_count === 0) {
-      console.log('waiting 5s and try again')
-      await sleep(1000 * 5)
-      return await _f()
-    }
+
     return artifacts[0].archive_download_url
   })()
 
