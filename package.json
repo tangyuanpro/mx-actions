@@ -1,0 +1,28 @@
+{
+  "name": "mx-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Innei/mx-actions.git"
+  },
+  "keywords": [
+    "action"
+  ],
+  "author": "Innei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Innei/mx-actions/issues"
+  },
+  "homepage": "https://github.com/Innei/mx-actions#readme",
+  "devDependencies": {
+    "zx": "^4.2.0"
+  },
+  "dependencies": {
+    "yargs": "^17.1.1"
+  }
+}

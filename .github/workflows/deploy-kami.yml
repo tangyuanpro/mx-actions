@@ -1,0 +1,81 @@
+on:
+  push:
+    branches: [master]
+  schedule:
+    # 每周一拉取 At 00:00 on Monday.
+    - cron: '0 0 * * 1'
+
+name: [Kami] Build & Deploy
+
+jobs:
+  build:
+    name: Build and Upload Release Asset
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.0.2
+          run_install: false
+
+      - name: Build project
+        env:
+          ASSETPREFIX: ${{ secrets.ASSETPREFIX }}
+          NEXT_PUBLIC_APIURL: ${{ secrets.NEXT_PUBLIC_APIURL }}
+          NEXT_PUBLIC_GATEWAY_URL: ${{ secrets.NEXT_PUBLIC_GATEWAY_URL }}
+          NEXT_PUBLIC_TRACKING_ID: ${{ secrets.NEXT_PUBLIC_TRACKING_ID }}
+          NEXT_PUBLIC_ALWAYS_HTTPS: 1
+          NETEASE_PHONE: ${{ secrets.NETEASE_PHONE }}
+          NETEASE_PASSWORD: ${{ secrets.NETEASE_PASSWORD }}
+        run: |
+          git clone https://github.com/mx-space/kami --depth 1
+          cd kami
+          pnpm i
+          yarn build
+          cd .next
+          zip -r ../release.zip ./*
+      - name: Upload kami Build Artifact
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: mx-kami
+          path: ./release.zip
+
+
+  # deploy:
+  #   name: Deploy to server
+  #   runs-on: ubuntu-latest
+  #   needs: [build]
+  #   steps:
+  #     - name: Exec deploy script with SSH
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         command_timeout: 10m
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USER }}
+  #         password: ${{ secrets.PASSWORD }}
+  #         script: |
+  #           whoami
+  #           cd
+  #           source ~/.zshrc
+  #           cd mx/kami
+  #           git reset --hard
+  #           git pull
+  #           node scripts/fetch-build.js
+  #           sh scripts/update-cdn.sh
