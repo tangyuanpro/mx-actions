@@ -55,11 +55,16 @@ async function fetchAsset() {
     return runId
   })()
 
+  await sleep(1000 * 10)
+  console.log('waiting 10s')
+
   const artifactUrl = await (async () => {
     const res = await fetch(
       endpoint + `/repos/${owner}/${repo}/actions/runs/${runId}/artifacts`,
     )
     const data = await res.json()
+
+    console.log(data)
 
     const { artifacts } = data
     return artifacts[0].archive_download_url
@@ -99,7 +104,7 @@ async function bootsharp() {
   cd(process.cwd())
   cd('./run/kami')
   await $`touch .env`
-  await $`pnpx next start -p 3000`
+  await $`pm2 reload ecosystem.config.js`
   cd(process.cwd())
   await $`rm -rf tmp`
 }
