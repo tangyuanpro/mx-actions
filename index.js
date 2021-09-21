@@ -1,15 +1,31 @@
-// @ts-check
 require('zx/globals')
+const { readFileSync, createWriteStream, writeFileSync } = require('fs')
+const { join } = require('path')
 const yargs = require('yargs')
+
+const workDir = join(process.cwd(), './dist')
+const tmpDir = join(process.cwd(), './tmp')
 /**
  * @type any
  */
 const argv = yargs.argv
 const endpoint = 'https://api.github.com'
 
-async function main() {
-  const owner = argv.owner || 'wibus-wee'
-  const repo = argv.repo || 'Mix-Space-ACTION'
+const token =
+  argv.GH_TOKEN ||
+  argv.ghToken ||
+  process.env.GH_TOKEN ||
+  (() => {
+    try {
+      return readFileSync('./gh_token', { encoding: 'utf-8' })
+    } catch {
+      return null
+    }
+  })()
+
+async function fetchAsset() {
+  const owner = argv.owner || 'Innei'
+  const repo = argv.repo || 'mx-actions'
   /**
    * @type {number}
    */
@@ -26,7 +42,6 @@ async function main() {
   })()
 
   const runId = await (async () => {
-    // const workflowId = 4808243
     const search = new URLSearchParams()
     search.append('per_page', '1')
     const res = await fetch(
@@ -41,7 +56,6 @@ async function main() {
   })()
 
   const artifactUrl = await (async () => {
-    // const runId = 1152823056
     const res = await fetch(
       endpoint + `/repos/${owner}/${repo}/actions/runs/${runId}/artifacts`,
     )
@@ -51,7 +65,43 @@ async function main() {
     return artifacts[0].archive_download_url
   })()
 
-  console.log(artifactUrl)
+  const fileRes = await fetch(artifactUrl, {
+    headers: {
+      Authorization: 'token ' + token,
+    },
+  })
+  const buffer = await fileRes.buffer()
+  writeFileSync(join(tmpDir, 'kami.zip'), buffer)
 }
 
-main()
+async function pull() {
+  cd(join(process.cwd(), './run'))
+  if (fs.existsSync(join(process.cwd(), 'run/kami'))) {
+    await $`cd kami && git pull`
+  } else {
+    await $`git clone https://github.com/mx-space/kami.git --depth 1`
+  }
+  await $`cd kami && pnpm i`
+}
+
+async function bootsharp() {
+  await $`mkdir -p dist`
+  await $`mkdir -p run`
+  await $`mkdir -p tmp`
+
+  await pull()
+  await fetchAsset()
+  cd(tmpDir)
+
+  await $`rm -rf ${join(process.cwd(), 'run/kami/.next')}`
+  await $`unzip kami.zip -d ../run/kami/.next`
+
+  cd(process.cwd())
+  cd('./run/kami')
+  await $`touch .env`
+  await $`pnpx next start -p 3000`
+  cd(process.cwd())
+  await $`rm -rf tmp`
+}
+
+bootsharp()
