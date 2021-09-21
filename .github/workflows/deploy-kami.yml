@@ -86,4 +86,4 @@ jobs:
             whoami
             cd mx
             cd mx-actions
-            node index.js --ghToken=$GH_TOKEN
+            node index.js --ghToken=$GH_TOKEN --owner=Innei --repo=mx-actions

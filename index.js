@@ -17,7 +17,7 @@ const token =
   process.env.GH_TOKEN ||
   (() => {
     try {
-      return readFileSync('./gh_token', { encoding: 'utf-8' })
+      return readFileSync('./gh_token', { encoding: 'utf-8' }).split('\n')[0]
     } catch {
       return null
     }
@@ -56,7 +56,7 @@ async function fetchAsset() {
   })()
 
   await sleep(1000 * 10)
-  console.log('waiting 10s')
+  console.log('waiting 60s')
 
   const artifactUrl = await (async () => {
     const res = await fetch(
