@@ -47,15 +47,18 @@ jobs:
         run: |
           git clone https://github.com/mx-space/kami --depth 1
           cd kami
+          rm configs.ts
+          rm public/manifest.json
+          cp ../configs/kami/configs.ts configs.ts
+          cp ../configs/kami/manifest.json public/manifest.json
           pnpm i
           yarn build
-          cd .next
-          zip -r ../release.zip ./*
+          cp -r .next ../dist
       - name: Upload kami Build Artifact
         uses: actions/upload-artifact@v2.2.2
         with:
           name: mx-kami
-          path: ./release.zip
+          path: ./dist
 
 
   # deploy:
