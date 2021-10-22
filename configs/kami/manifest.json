@@ -1,8 +1,8 @@
 {
-  "name": "静かな森",
-  "short_name": "静かな森",
+  "name": "夜夕小窝",
+  "short_name": "夜夕小窝",
   "theme_color": "#39c5bb",
-  "description": "致虚极，守静笃。",
+  "description": "名前のない空に 明日を探して",
   "background_color": "#39c5bb",
   "display": "standalone",
   "scope": "/",
