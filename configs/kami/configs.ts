@@ -122,6 +122,6 @@ export default {
     name: '萌备 20210707 号',
     url: 'https://icp.gov.moe/?keyword=20210707',
   },
-  travellings: true, // 开往
+  travellings: false, // 开往
   donate: 'https://afdian.net/@syxjy',
 }
