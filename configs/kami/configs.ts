@@ -118,6 +118,10 @@ export default {
   biliId: 365118487,
   homePage: 'https://yexi.pro', // footer link
   menu,
+  icp: {
+    name: '萌备 20210707 号',
+    url: 'https://icp.gov.moe/?keyword=20210707',
+  },
   travellings: false, // 开往
   donate: 'https://afdian.net/@syxjy',
 }
