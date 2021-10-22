@@ -105,35 +105,19 @@ const menu: MenuModel[] = [
 ]
 const social: SocialLinkModel[] = [
   {
-    url: 'https://github.com/Innei',
+    url: 'https://github.com/tangyuanpro',
     title: 'GitHub',
     icon: faGithub,
     color: 'var(--black)',
   },
-  {
-    url: 'https://jq.qq.com/?_wv=1027&k=5t9N0mw',
-    title: 'QQ',
-    icon: faQq,
-    color: '#12b7f5',
-  },
-  {
-    url: 'https://twitter.com/__oQuery',
-    title: 'twitter',
-    icon: faTwitter,
-    color: '#02A4ED',
-  },
 ]
 export default {
-  url: 'https://innei.ren',
+  url: 'https://yexi.pro',
   alwaysHTTPS: 1,
   social,
-  biliId: 26578164,
-  homePage: 'https://innei.ren', // footer link
+  biliId: 365118487,
+  homePage: 'https://yexi.pro', // footer link
   menu,
-  icp: {
-    name: '浙ICP备 20028356 号',
-    url: 'http://beian.miit.gov.cn/',
-  },
-  travellings: true, // 开往
-  donate: 'https://afdian.net/@Innei',
+  travellings: false, // 开往
+  donate: 'https://afdian.net/@syxjy',
 }
