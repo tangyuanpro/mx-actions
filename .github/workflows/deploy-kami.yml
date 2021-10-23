@@ -86,4 +86,4 @@ jobs:
             whoami
             cd mx
             cd mx-actions
-            tmux new-session -d -s deploy_kami 'node index.js --ghToken=$GH_TOKEN --owner=Innei --repo=mx-actions'
+            tmux new-session -d -s deploy_kami 'node index.js --ghToken=$GH_TOKEN --owner=tangyuanpro --repo=mx-actions'
