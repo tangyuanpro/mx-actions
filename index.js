@@ -65,12 +65,13 @@ async function fetchAsset() {
 
     return artifacts[0].archive_download_url
   })()
-
+  $.verbose = false
   const fileRes = await fetch(artifactUrl, {
     headers: {
       Authorization: 'token ' + token,
     },
   })
+  $.verbose = true
   const buffer = await fileRes.buffer()
   writeFileSync(join(tmpDir, 'kami.zip'), buffer)
 }
@@ -99,7 +100,10 @@ async function bootsharp() {
 
   cd(process.cwd())
   cd('./run/kami')
-  await $`touch .env`
+  await $`rm .env && touch .env`
+  // 写入 ENV
+  await $`echo "NETEASE_PHONE=${process.env.NETEASE_PHONE}" >> .env`
+  await $`echo "NETEASE_PASSWORD=${process.env.NETEASE_PASSWORD}" >> .env`
   await $`pm2 reload ecosystem.config.js`
   cd(process.cwd())
   await $`rm -rf tmp`

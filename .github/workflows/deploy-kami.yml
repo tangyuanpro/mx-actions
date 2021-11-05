@@ -51,6 +51,10 @@ jobs:
           rm public/manifest.json
           cp ../configs/kami/configs.ts configs.ts
           cp ../configs/kami/manifest.json public/manifest.json
+          rm -f .env
+          touch .env
+          echo -e "NETEASE_PHONE=$NETEASE_PHONE\n" >> .env
+          echo "NETEASE_PHONE=$NETEASE_PASSWORD" >> .env
           pnpm i
           yarn build
           cp -r .next ../dist
